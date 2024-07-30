@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             [
                 'uuid' => Uuid::uuid4()->toString(),
                 'name' => 'Admin',
-                'password' => Hash::make('<>password'),
+                'password' => Hash::make('Express1125'),
                 'role' => 'admin',
             ]
         );
@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
             [
                 'uuid' => Uuid::uuid4()->toString(),
                 'name' => 'Dual Lima Express',
-                'password' => Hash::make('<>password'),
+                'password' => Hash::make('Express2547'),
                 'role' => 'owner',
             ]
         );
