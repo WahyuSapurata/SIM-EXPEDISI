@@ -18,7 +18,7 @@ class Auth extends BaseController
         $credential = $authRequest->getCredentials();
 
         if (!FacadesAuth::attempt($credential)) {
-            return redirect()->route('login.login-akun')->with('failed', 'Username atau Password salah')->withInput($authRequest->only('username'));
+            return redirect()->route('login.dlm-akun')->with('failed', 'Username atau Password salah')->withInput($authRequest->only('username'));
         } else {
             return $this->authenticated();
         }
@@ -36,6 +36,6 @@ class Auth extends BaseController
     public function logout()
     {
         FacadesAuth::logout();
-        return redirect()->route('login.login-akun')->with('success', 'Berhasil Logout');
+        return redirect()->route('login.dlm-akun')->with('success', 'Berhasil Logout');
     }
 }

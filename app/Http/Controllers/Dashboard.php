@@ -22,7 +22,7 @@ class Dashboard extends BaseController
         if (auth()->check()) {
             return redirect()->back();
         }
-        return redirect()->route('login.login-akun');
+        return redirect()->route('login.dlm-akun');
     }
 
     public function error500()

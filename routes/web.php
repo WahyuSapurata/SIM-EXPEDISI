@@ -19,7 +19,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('/', 'Landing@index')->name('landing');
 
     Route::group(['prefix' => 'login', 'middleware' => ['guest'], 'as' => 'login.'], function () {
-        Route::get('/login-akun', 'Auth@show')->name('login-akun');
+        Route::get('/dlm-akun', 'Auth@show')->name('dlm-akun');
         Route::post('/login-proses', 'Auth@login_proses')->name('login-proses');
     });
 
