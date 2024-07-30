@@ -5,6 +5,9 @@
     <!-- ========== Meta Tags ========== -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description"
+        content="Bergerak di Bidang Jasa Pengiriman Motor, Mobil, Alat Berat, Cargo dan Kendaraan Lainnya Antar Pulau. Hingga Pelosok Nusantara Secara Port to Port Hingga Door to Door" />
+    <meta name="keywords" content="expedisi, pengiriman, jasa pengiriman, melayani jasa pengiriman" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="keendevs">
     <!-- ======== Page title ============ -->
@@ -303,7 +306,8 @@
                         <h1>Welcome to Our Company</h1>
                         <h3>PT DUNIA LINTAS MANDIRI (Dualima Express)</h3>
                         <p style="text-align: justify">
-                            Didirikan oleh para profesional di bidangnya, Dualima Express hadir untuk memenuhi kebutuhan
+                            Didirikan oleh para profesional di bidangnya, PT DUNIA LINTAS MANDIRI (Dualima Express)
+                            hadir untuk memenuhi kebutuhan
                             distribusi unit kendaraan maupun barang dari satu wilayah ke wilayah lainnya. Sebagai
                             penyedia jasa pengiriman via laut dan darat, Dualima Express telah mengembangkan layanan
                             yang lebih efektif dengan berbagai pilihan, termasuk Port to Port, Port to Door, Door to
@@ -692,7 +696,7 @@
                     <div class="contact-info">
                         <div class="single-info" style="margin-bottom: 20px; padding: 14px 35px; font-size: 15px;">
                             <h4>eMail :</h4>
-                            <span>Dunialintasm andiri@gm ail.c om</span>
+                            <span>Dunialintasmandiri@gmail.com</span>
                         </div>
                         <div class="single-info" style="margin-bottom: 20px; padding: 14px 35px; font-size: 15px;">
                             <h4>Phone :</h4>
@@ -708,7 +712,7 @@
                         </div>
                         <div class="single-info" style="margin-bottom: 20px; padding: 14px 35px; font-size: 15px;">
                             <h4>Office/Gudang :</h4>
-                            <span>Office/Gudang : Jl. Talasalapang Komp Ruko Puri Bukit Mas, Blok D No 14, Makassar
+                            <span>Jl. Talasalapang Komp Ruko Puri Bukit Mas, Blok D No 14, Makassar
                                 90222</span>
                         </div>
                     </div>
@@ -721,7 +725,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 text-center">
-                    &copy; 2020 Copyright Reserved - <a href="#">PT DUALIMA LINTAS MANDIRI</a>
+                    &copy; 2024 Copyright Reserved - <a href="#">PT DUALIMA LINTAS MANDIRI</a>
                 </div>
             </div>
         </div>
