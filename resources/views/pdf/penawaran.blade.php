@@ -140,7 +140,7 @@
                 <h1 style="color: red">PT. DUNIA LINTAS MANDIRI</h1>
                 <p style="font-weight: bold">Shipping, Freight Forwarding & Domestic Cargo</p>
                 <p>Office: Jl. Raya Kelapa Hibrida I Blok GI No. 3, Kelapa Gading, Jakarta Utara 14240</p>
-                <p>Email: dunialintasmandiri@gmail.com | Website: dunialintasmandiri@gmail.com</p>
+                <p>Email: dunialintasmandiri@gmail.com | Website: dunialintasmandiri.my.id</p>
                 <p>Phone: 08111252547 | 0811425254</p>
                 <p>Telp: 021-2422 3333</p>
             </div>
