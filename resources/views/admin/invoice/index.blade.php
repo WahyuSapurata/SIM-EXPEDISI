@@ -25,11 +25,20 @@
                                             <th>Harga</th>
                                             <th>Total Harga</th>
                                             <th>Terbayarkan</th>
+                                            <th>Ket</th>
                                             <th>Submit</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     </tbody>
+                                    <tfoot class="bg-primary rounded">
+                                        <tr class="fw-bolder fs-6 text-gray-800">
+                                            <td style="text-align: left !important;" colspan="10">Total Invoice</td>
+                                            <td style="text-align: left !important;" colspan="4" id="total-invoice">
+                                                Rp 0
+                                            </td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -263,6 +272,13 @@
                             '0,0') : '-';
                     }
                 }, {
+                    data: 'terbayarkan',
+                    className: 'text-center',
+                    render: function(data, type, row, meta) {
+                        return data ? 'Terbayar Rp ' + numeral(data).format(
+                            '0,0') : 'Belum Terbayar';
+                    }
+                }, {
                     data: 'uuid',
                 }],
                 columnDefs: [{
@@ -303,6 +319,38 @@
                     var startIndex = api.context[0]._iDisplayStart;
                     var rowIndex = startIndex + index + 1;
                     $('td', row).eq(0).html(rowIndex);
+                },
+                footerCallback: function(row, data, start, end, display) {
+                    var api = this.api();
+                    let total = 0;
+
+                    // Calculate total for 'keluar' and 'masuk' columns
+                    api.column(10, {
+                        search: 'applied'
+                    }).data().each(function(value) {
+                        // Periksa apakah harga dan qty valid
+                        const hargaArray = value.harga ||
+                    []; // Gunakan array kosong jika harga tidak ada
+                        const qtyArray = value.qty ||
+                    []; // Gunakan array kosong jika qty tidak ada
+
+                        // Pastikan harga dan qty memiliki panjang yang sama
+                        const length = Math.min(hargaArray.length, qtyArray.length);
+
+                        // Hitung total harga
+                        let totalHarga = 0;
+                        for (let i = 0; i < length; i++) {
+                            const harga = parseFloat(hargaArray[i]) ||
+                                0; // Gunakan default 0 jika harga tidak ada
+                            const qty = parseFloat(qtyArray[i]) ||
+                                0; // Gunakan default 0 jika qty tidak ada
+                            totalHarga += harga * qty; // Tambahkan total harga
+                        }
+                        total += totalHarga; // Tambahkan totalHarga ke total keseluruhan
+                    });
+
+                    // Update the total row in the footer
+                    $('#total-invoice').html('Rp ' + numeral(total).format('0,0'));
                 },
             });
         };
