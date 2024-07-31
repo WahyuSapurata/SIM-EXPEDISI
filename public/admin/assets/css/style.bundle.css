@@ -54578,7 +54578,7 @@ code:not([class*="language-"]) {
     span,
     ul {
         scrollbar-width: thin;
-        scrollbar-color: #eff2f5 transparent;
+        scrollbar-color: #007fff transparent;
     }
 
     div::-webkit-scrollbar,
@@ -54606,7 +54606,7 @@ code:not([class*="language-"]) {
     pre:hover,
     span:hover,
     ul:hover {
-        scrollbar-color: #e9edf1 transparent;
+        scrollbar-color: #007fff transparent;
     }
 
     div:hover::-webkit-scrollbar-thumb,
