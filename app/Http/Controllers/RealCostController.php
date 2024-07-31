@@ -53,7 +53,7 @@ class RealCostController extends BaseController
                 $newNumber = str_pad($lastNumber + 1, 2, '0', STR_PAD_LEFT);
             } else {
                 // Jika belum ada invoice sebelumnya, mulai dari 01
-                $newNumber = '593';
+                $newNumber = '594';
             }
 
             // Buat nomor invoice baru
@@ -137,7 +137,7 @@ class RealCostController extends BaseController
                     $newNumber = str_pad($lastNumber + 1, 2, '0', STR_PAD_LEFT);
                 } else {
                     // Jika belum ada invoice sebelumnya, mulai dari 01
-                    $newNumber = '593';
+                    $newNumber = '594';
                 }
 
                 // Buat nomor invoice baru
