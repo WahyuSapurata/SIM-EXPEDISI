@@ -291,6 +291,9 @@
                                             <div class="mt-10 d-grid">
                                                 <button type="button" class="btn btn-danger btn-sm hapusInputBtn">Hapus</button>
                                             </div>
+                                            <div class="mt-10 d-grid">
+                                                <button type="button" class="btn btn-primary tambahInputBtn">Tambah Input</button>
+                                            </div>
                                         </div>
                                     `;
                                 // Tambahkan HTML baru ke dalam elemen Container
