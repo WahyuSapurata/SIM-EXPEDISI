@@ -189,7 +189,7 @@
                                 </span>
                                 <span class="menu-title"
                                     style="{{ isset($path[2]) && $path[2] === 'invetaris' ? 'color: #F4BE2A' : 'color: #FFFFFF' }}">By
-                                    Invetaris</span>
+                                    Inventaris</span>
                             </a>
                         </div>
                         <!--end::Menu item-->
