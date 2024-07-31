@@ -212,7 +212,7 @@
 
                                         <div class="mb-10 inputGroup">
                                             <label class="form-label">QTY</label>
-                                            <input type="number" class="form-control" name="qty[]">
+                                            <input type="text" class="form-control" name="qty[]">
                                             <small class="text-danger qty_error"></small>
                                         </div>
 
@@ -272,7 +272,7 @@
 
                                             <div class="mb-10 inputGroup">
                                                 <label class="form-label">QTY</label>
-                                                <input type="number" class="form-control" name="qty[]" value="${data.qty[index]}">
+                                                <input type="text" class="form-control" name="qty[]" value="${data.qty[index]}">
                                                 <small class="text-danger qty_error"></small>
                                             </div>
 

@@ -113,7 +113,7 @@
 
                     <div class="mb-10">
                         <label class="form-label">QTY</label>
-                        <input type="number" id="qty" class="form-control" name="qty">
+                        <input type="text" id="qty" class="form-control" name="qty">
                         <small class="text-danger qty_error"></small>
                     </div>
 
