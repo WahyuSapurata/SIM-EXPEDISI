@@ -42,8 +42,8 @@ class RealCostController extends BaseController
 
             // Ambil nomor invoice terakhir untuk bulan dan tahun ini
             $lastInvoice = DB::table('real_costs')
-                ->whereRaw('EXTRACT(YEAR FROM tanggal::timestamp) = ?', [$year])
-                ->whereRaw('EXTRACT(MONTH FROM tanggal::timestamp) = ?', [$month])
+                ->whereRaw('EXTRACT(YEAR FROM STR_TO_DATE(tanggal, "%Y-%m-%d")) = ?', [$year])
+                ->whereRaw('EXTRACT(MONTH FROM STR_TO_DATE(tanggal, "%Y-%m-%d")) = ?', [$month])
                 ->orderBy('id', 'desc')
                 ->first();
 
