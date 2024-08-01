@@ -257,6 +257,24 @@
 
                 <!--begin::Menu item-->
                 <div class="menu-item">
+                    <a class="menu-link {{ isset($path[1]) && $path[1] === 'invoice' ? 'active' : '' }}"
+                        href="{{ route('owner.invoice') }}">
+                        <span class="menu-icon">
+                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <img src="{{ isset($path[1]) && $path[1] === 'invoice' ? url('admin/assets/media/icons/aside/invoiceact.svg') : url('/admin/assets/media/icons/aside/invoicedef.svg') }}"
+                                    alt="">
+                            </span>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-title"
+                            style="{{ isset($path[1]) && $path[1] === 'invoice' ? 'color: #F4BE2A' : 'color: #FFFFFF' }}">Invoice</span>
+                    </a>
+                </div>
+                <!--end::Menu item-->
+
+                <!--begin::Menu item-->
+                <div class="menu-item">
                     <a class="menu-link {{ isset($path[1]) && $path[1] === 'piutang' ? 'active' : '' }}"
                         href="{{ route('owner.piutang') }}">
                         <span class="menu-icon">

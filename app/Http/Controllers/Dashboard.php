@@ -10,6 +10,7 @@ use App\Models\Penawaran;
 use App\Models\Penilaian;
 use App\Models\Piutan;
 use App\Models\RealCost;
+use App\Models\SaldoAwal;
 use App\Models\SubCpmk;
 use DateTime;
 use Illuminate\Http\Request;
@@ -39,6 +40,8 @@ class Dashboard extends BaseController
         $piutang = Piutan::all();
         $realcost = RealCost::all();
 
+        $saldo = SaldoAwal::all();
+
         $opr = 0;
         foreach ($operasional as $item_opr) {
             $opr += $item_opr->qty * $item_opr->harga;
@@ -56,9 +59,14 @@ class Dashboard extends BaseController
             $real += $item_real->terbayarkan;
         }
 
+        $sa = 0;
+        foreach ($saldo as $item_saldo) {
+            $sa += $item_saldo->saldo;
+        }
+
         $pendapatan = $pnr + $ptn + $real;
         $pengeluaran = $opr;
-        $kas = $pendapatan - $pengeluaran;
+        $kas = $pendapatan - $pengeluaran + $sa;
 
         return view('dashboard.admin', compact('module', 'pendapatan', 'pengeluaran', 'kas'));
     }
@@ -72,6 +80,8 @@ class Dashboard extends BaseController
         $piutang = Piutan::all();
         $realcost = RealCost::all();
 
+        $saldo = SaldoAwal::all();
+
         $opr = 0;
         foreach ($operasional as $item_opr) {
             $opr += $item_opr->qty * $item_opr->harga;
@@ -89,9 +99,14 @@ class Dashboard extends BaseController
             $real += $item_real->terbayarkan;
         }
 
+        $sa = 0;
+        foreach ($saldo as $item_saldo) {
+            $sa += $item_saldo->saldo;
+        }
+
         $pendapatan = $pnr + $ptn + $real;
         $pengeluaran = $opr;
-        $kas = $pendapatan - $pengeluaran;
+        $kas = $pendapatan - $pengeluaran + $sa;
 
         return view('dashboard.owner', compact('module', 'pendapatan', 'pengeluaran', 'kas'));
     }

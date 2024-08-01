@@ -99,6 +99,9 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::get('/customer', 'DataCustomerController@owner')->name('customer')->middleware('userAkses:owner');
         Route::get('/get-customer', 'DataCustomerController@get')->name('get-customer')->middleware('userAkses:owner');
 
+        Route::get('/invoice', 'Invoice@owner')->name('invoice')->middleware('userAkses:owner');
+        Route::get('/get-invoice', 'Invoice@get')->name('get-invoice')->middleware('userAkses:owner');
+
         Route::get('/piutang', 'PiutanController@owner')->name('piutang')->middleware('userAkses:owner');
         Route::get('/get-piutang', 'PiutanController@get')->name('get-piutang')->middleware('userAkses:owner');
 

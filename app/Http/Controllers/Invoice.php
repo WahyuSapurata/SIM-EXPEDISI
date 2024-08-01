@@ -15,6 +15,12 @@ class Invoice extends BaseController
         return view('admin.invoice.index', compact('module'));
     }
 
+    public function owner()
+    {
+        $module = 'Invoice';
+        return view('owner.invoice.index', compact('module'));
+    }
+
     public function get()
     {
         // Mengambil semua data pengguna
