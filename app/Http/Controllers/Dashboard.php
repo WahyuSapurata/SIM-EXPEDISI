@@ -257,28 +257,28 @@ class Dashboard extends BaseController
         } elseif ($year) {
             $realCostData = DB::table('real_costs')
                 ->select(DB::raw('SUM(CAST(terbayarkan AS DECIMAL)) as total_realcost, DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m") as bulan'))
-                ->whereYear('tanggal', '=', $year)
+                ->whereRaw('YEAR(STR_TO_DATE(tanggal, "%Y-%m-%d")) = ?', [$year])
                 ->groupBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m")'))
                 ->orderBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m")'))
                 ->get();
 
             $piutangData = DB::table('piutans')
                 ->select(DB::raw('SUM(CAST(terbayarkan AS DECIMAL)) as total_piutang, DATE_FORMAT(created_at, "%m") as bulan'))
-                ->whereYear('created_at', '=', $year)
+                ->whereRaw('YEAR(created_at) = ?', [$year])
                 ->groupBy(DB::raw('DATE_FORMAT(created_at, "%m")'))
                 ->orderBy(DB::raw('DATE_FORMAT(created_at, "%m")'))
                 ->get();
 
             $penawaranData = DB::table('penawarans')
                 ->select(DB::raw('SUM(CAST(harga AS DECIMAL)) as total_penawaran, DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m") as bulan'))
-                ->whereYear(DB::raw('STR_TO_DATE(tanggal, "%Y-%m-%d")'), '=', $year)
+                ->whereRaw('YEAR(STR_TO_DATE(tanggal, "%Y-%m-%d")) = ?', [$year])
                 ->groupBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m")'))
                 ->orderBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m")'))
                 ->get();
 
             $operasionalData = DB::table('operasional_kantors')
                 ->select(DB::raw('SUM(CAST(qty AS DECIMAL) * CAST(harga AS DECIMAL)) as total_operasional, DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m") as bulan'))
-                ->whereYear('tanggal', '=', $year)
+                ->whereRaw('YEAR(STR_TO_DATE(tanggal, "%Y-%m-%d")) = ?', [$year])
                 ->groupBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m")'))
                 ->orderBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m")'))
                 ->get();
