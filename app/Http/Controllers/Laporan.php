@@ -361,14 +361,19 @@ class Laporan extends BaseController
         $operasional = OperasionalKantor::where('kategori', 'operasional')
             ->whereBetween('tanggal', [$startDate, $endDate])
             ->get();
-        $inventaris = OperasionalKantor::where('kategori', 'invetaris')
+
+        $inventaris = OperasionalKantor::where('kategori', 'inventaris')
             ->whereBetween('tanggal', [$startDate, $endDate])
             ->get();
+
         $biaya = OperasionalKantor::where('kategori', 'biaya')
             ->whereBetween('tanggal', [$startDate, $endDate])
             ->get();
+
         $piutang = Piutan::whereBetween('created_at', [$startDate, $endDate])->get();
+
         $realcost = RealCost::whereBetween('tanggal', [$startDate, $endDate])->get();
+
         $saldo = SaldoAwal::all(); // Asumsikan saldo awal tidak memiliki tanggal
 
         // Menghitung total saldo awal dan real cost
