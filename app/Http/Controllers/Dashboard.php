@@ -262,30 +262,29 @@ class Dashboard extends BaseController
                 ->groupBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%d-%m-%Y"), "%m")'))
                 ->orderBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%d-%m-%Y"), "%m")'))
                 ->get();
-            dd($realCostData);
 
             // Ambil data dari tabel piutans
             $piutangData = DB::table('piutans')
                 ->select(DB::raw('SUM(CAST(terbayarkan AS DECIMAL)) as total_piutang, DATE_FORMAT(created_at, "%m") as bulan'))
-                ->whereYear('created_at', $year) // Gunakan whereYear untuk filter tahun
+                ->whereRaw('YEAR(created_at) = ?', [$year])
                 ->groupBy(DB::raw('DATE_FORMAT(created_at, "%m")'))
                 ->orderBy(DB::raw('DATE_FORMAT(created_at, "%m")'))
                 ->get();
 
             // Ambil data dari tabel penawarans
             $penawaranData = DB::table('penawarans')
-                ->select(DB::raw('SUM(CAST(harga AS DECIMAL)) as total_penawaran, DATE_FORMAT(tanggal, "%m") as bulan'))
-                ->whereYear('tanggal', $year) // Gunakan whereYear untuk filter tahun
-                ->groupBy(DB::raw('DATE_FORMAT(tanggal, "%m")'))
-                ->orderBy(DB::raw('DATE_FORMAT(tanggal, "%m")'))
+                ->select(DB::raw('SUM(CAST(harga AS DECIMAL)) as total_penawaran, DATE_FORMAT(STR_TO_DATE(tanggal, "%d-%m-%Y"), "%m") as bulan'))
+                ->whereRaw('YEAR(STR_TO_DATE(tanggal, "%d-%m-%Y")) = ?', [$year])
+                ->groupBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%d-%m-%Y"), "%m")'))
+                ->orderBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%d-%m-%Y"), "%m")'))
                 ->get();
 
             // Ambil data dari tabel operasional_kantors
             $operasionalData = DB::table('operasional_kantors')
-                ->select(DB::raw('SUM(CAST(qty AS DECIMAL) * CAST(harga AS DECIMAL)) as total_operasional, DATE_FORMAT(tanggal, "%m") as bulan'))
-                ->whereYear('tanggal', $year) // Gunakan whereYear untuk filter tahun
-                ->groupBy(DB::raw('DATE_FORMAT(tanggal, "%m")'))
-                ->orderBy(DB::raw('DATE_FORMAT(tanggal, "%m")'))
+                ->select(DB::raw('SUM(CAST(qty AS DECIMAL) * CAST(harga AS DECIMAL)) as total_operasional, DATE_FORMAT(STR_TO_DATE(tanggal, "%d-%m-%Y"), "%m") as bulan'))
+                ->whereRaw('YEAR(STR_TO_DATE(tanggal, "%d-%m-%Y")) = ?', [$year])
+                ->groupBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%d-%m-%Y"), "%m")'))
+                ->orderBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%d-%m-%Y"), "%m")'))
                 ->get();
 
             // Menggabungkan bulan dari semua data untuk memastikan semua bulan terdaftar
