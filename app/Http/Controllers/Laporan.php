@@ -351,8 +351,8 @@ class Laporan extends BaseController
 
         // Mengubah format tanggal menjadi Y-m-d
         try {
-            $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $startDateStr)->format('d-m-Y');
-            $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $endDateStr)->format('d-m-Y');
+            $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $startDateStr)->format('Y-m-d');
+            $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $endDateStr)->format('Y-m-d');
         } catch (\Exception $e) {
             return response()->json(['error' => 'Format tanggal tidak valid.'], 400);
         }
