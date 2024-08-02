@@ -258,7 +258,7 @@ class Dashboard extends BaseController
             // Ambil data dari tabel real_costs
             $realCostData = DB::table('real_costs')
                 ->select(DB::raw('SUM(CAST(terbayarkan AS DECIMAL)) as total_realcost, DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m") as bulan'))
-                ->whereRaw('YEAR(STR_TO_DATE(tanggal, "%Y-%m-%d")) = ?', [$year])
+                ->whereRaw('DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%Y") = ?', [$year])
                 ->groupBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m")'))
                 ->orderBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m")'))
                 ->get();
@@ -266,7 +266,7 @@ class Dashboard extends BaseController
             // Ambil data dari tabel piutans
             $piutangData = DB::table('piutans')
                 ->select(DB::raw('SUM(CAST(terbayarkan AS DECIMAL)) as total_piutang, DATE_FORMAT(created_at, "%m") as bulan'))
-                ->whereRaw('YEAR(created_at) = ?', [$year])
+                ->whereRaw('DATE_FORMAT(created_at, "%Y") = ?', [$year])
                 ->groupBy(DB::raw('DATE_FORMAT(created_at, "%m")'))
                 ->orderBy(DB::raw('DATE_FORMAT(created_at, "%m")'))
                 ->get();
@@ -274,7 +274,7 @@ class Dashboard extends BaseController
             // Ambil data dari tabel penawarans
             $penawaranData = DB::table('penawarans')
                 ->select(DB::raw('SUM(CAST(harga AS DECIMAL)) as total_penawaran, DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m") as bulan'))
-                ->whereRaw('YEAR(STR_TO_DATE(tanggal, "%Y-%m-%d")) = ?', [$year])
+                ->whereRaw('DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%Y") = ?', [$year])
                 ->groupBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m")'))
                 ->orderBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m")'))
                 ->get();
@@ -282,7 +282,7 @@ class Dashboard extends BaseController
             // Ambil data dari tabel operasional_kantors
             $operasionalData = DB::table('operasional_kantors')
                 ->select(DB::raw('SUM(CAST(qty AS DECIMAL) * CAST(harga AS DECIMAL)) as total_operasional, DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m") as bulan'))
-                ->whereRaw('YEAR(STR_TO_DATE(tanggal, "%Y-%m-%d")) = ?', [$year])
+                ->whereRaw('DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%Y") = ?', [$year])
                 ->groupBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m")'))
                 ->orderBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m")'))
                 ->get();
