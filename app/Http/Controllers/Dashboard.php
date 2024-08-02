@@ -255,6 +255,7 @@ class Dashboard extends BaseController
 
             // Jika input tahun diberikan, ambil data berdasarkan tahun
         } elseif ($year) {
+            // Ambil data dari tabel real_costs
             $realCostData = DB::table('real_costs')
                 ->select(DB::raw('SUM(CAST(terbayarkan AS DECIMAL)) as total_realcost, DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m") as bulan'))
                 ->whereRaw('YEAR(STR_TO_DATE(tanggal, "%Y-%m-%d")) = ?', [$year])
@@ -262,6 +263,7 @@ class Dashboard extends BaseController
                 ->orderBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m")'))
                 ->get();
 
+            // Ambil data dari tabel piutans
             $piutangData = DB::table('piutans')
                 ->select(DB::raw('SUM(CAST(terbayarkan AS DECIMAL)) as total_piutang, DATE_FORMAT(created_at, "%m") as bulan'))
                 ->whereRaw('YEAR(created_at) = ?', [$year])
@@ -269,6 +271,7 @@ class Dashboard extends BaseController
                 ->orderBy(DB::raw('DATE_FORMAT(created_at, "%m")'))
                 ->get();
 
+            // Ambil data dari tabel penawarans
             $penawaranData = DB::table('penawarans')
                 ->select(DB::raw('SUM(CAST(harga AS DECIMAL)) as total_penawaran, DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m") as bulan'))
                 ->whereRaw('YEAR(STR_TO_DATE(tanggal, "%Y-%m-%d")) = ?', [$year])
@@ -276,6 +279,7 @@ class Dashboard extends BaseController
                 ->orderBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m")'))
                 ->get();
 
+            // Ambil data dari tabel operasional_kantors
             $operasionalData = DB::table('operasional_kantors')
                 ->select(DB::raw('SUM(CAST(qty AS DECIMAL) * CAST(harga AS DECIMAL)) as total_operasional, DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%m") as bulan'))
                 ->whereRaw('YEAR(STR_TO_DATE(tanggal, "%Y-%m-%d")) = ?', [$year])
@@ -291,7 +295,6 @@ class Dashboard extends BaseController
                 $operasionalData->pluck('bulan')->toArray()
             ));
             sort($allMonths);
-            dd($allMonths);
 
             // Mengisi array dengan bulan-bulan yang ada dan inisialisasi pendapatan dan pengeluaran
             foreach ($allMonths as $month) {
