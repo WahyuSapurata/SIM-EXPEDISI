@@ -256,13 +256,13 @@ class Dashboard extends BaseController
 
             // Mengisi array dengan bulan-bulan yang ada dan inisialisasi pendapatan dan pengeluaran
             foreach ($allMonths as $month) {
-                $result['labels'][] = $monthsIndonesian[$month]; // Mengubah format bulan menjadi nama bulan dalam bahasa Indonesia
+                $result['labels'][] = $monthsIndonesian[$month]; // Konversi bulan ke nama bulan dalam bahasa Indonesia
                 $result['pendapatan'][] = 0;
                 $result['pengeluaran'][] = 0;
                 $result['laba'][] = 0; // Inisialisasi laba
             }
 
-            // Mengisi array data pendapatan
+            // Mengisi array data pendapatan dan pengeluaran
             foreach ($realCostData as $row) {
                 $index = array_search($monthsIndonesian[$row->bulan], $result['labels']);
                 $result['pendapatan'][$index] = (int) $row->total_realcost;
@@ -278,7 +278,6 @@ class Dashboard extends BaseController
                 $result['pendapatan'][$index] += (int) $row->total_penawaran;
             }
 
-            // Mengisi array data operasional
             foreach ($operasionalData as $row) {
                 $index = array_search($monthsIndonesian[$row->bulan], $result['labels']);
                 $result['pengeluaran'][$index] = (int) $row->total_operasional;
