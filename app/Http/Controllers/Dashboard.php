@@ -257,10 +257,10 @@ class Dashboard extends BaseController
         } elseif ($year) {
             // Ambil data dari tabel real_costs
             $realCostData = DB::table('real_costs')
-                ->select(DB::raw('SUM(CAST(terbayarkan AS DECIMAL)) as total_realcost, DATE_FORMAT(tanggal, "%m") as bulan'))
-                ->whereYear('tanggal', $year) // Gunakan whereYear untuk filter tahun
-                ->groupBy(DB::raw('DATE_FORMAT(tanggal, "%m")'))
-                ->orderBy(DB::raw('DATE_FORMAT(tanggal, "%m")'))
+                ->select(DB::raw('SUM(CAST(terbayarkan AS DECIMAL)) as total_realcost, DATE_FORMAT(STR_TO_DATE(tanggal, "%d-%m-%Y"), "%m") as bulan'))
+                ->whereRaw('YEAR(STR_TO_DATE(tanggal, "%d-%m-%Y")) = ?', [$year])
+                ->groupBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%d-%m-%Y"), "%m")'))
+                ->orderBy(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%d-%m-%Y"), "%m")'))
                 ->get();
             dd($realCostData);
 
