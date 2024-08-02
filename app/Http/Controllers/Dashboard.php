@@ -258,10 +258,11 @@ class Dashboard extends BaseController
             // Ambil data dari tabel real_costs
             $realCostData = DB::table('real_costs')
                 ->select(DB::raw('SUM(CAST(terbayarkan AS DECIMAL)) as total_realcost, DATE_FORMAT(tanggal, "%m") as bulan'))
-                ->whereYear('tanggal', $year) // Gunakan whereYear untuk filter tahun
+                ->whereRaw('DATE_FORMAT(STR_TO_DATE(tanggal, "%Y-%m-%d"), "%Y") = ?', $year)
                 ->groupBy(DB::raw('DATE_FORMAT(tanggal, "%m")'))
                 ->orderBy(DB::raw('DATE_FORMAT(tanggal, "%m")'))
                 ->get();
+            dd($realCostData);
 
             // Ambil data dari tabel piutans
             $piutangData = DB::table('piutans')
