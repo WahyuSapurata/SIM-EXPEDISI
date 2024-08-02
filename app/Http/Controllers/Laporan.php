@@ -361,7 +361,7 @@ class Laporan extends BaseController
         $operasional = OperasionalKantor::where('kategori', 'operasional')
             ->whereBetween('tanggal', [$startDate, $endDate])
             ->get();
-        $inventaris = OperasionalKantor::where('kategori', 'inventaris')
+        $inventaris = OperasionalKantor::where('kategori', 'invetaris')
             ->whereBetween('tanggal', [$startDate, $endDate])
             ->get();
         $biaya = OperasionalKantor::where('kategori', 'biaya')
