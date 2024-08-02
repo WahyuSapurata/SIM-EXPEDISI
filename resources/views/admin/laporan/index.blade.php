@@ -190,7 +190,7 @@
                 'Saldo',
                 'POST', formData);
             $('#kt_modal_2').modal('hide');
-            // window.location.reload();
+            window.location.reload();
         });
 
         $(document).on('keyup', '#search_', function(e) {
