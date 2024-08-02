@@ -291,6 +291,7 @@ class Dashboard extends BaseController
                 $operasionalData->pluck('bulan')->toArray()
             ));
             sort($allMonths);
+            dd($allMonths);
 
             // Mengisi array dengan bulan-bulan yang ada dan inisialisasi pendapatan dan pengeluaran
             foreach ($allMonths as $month) {
