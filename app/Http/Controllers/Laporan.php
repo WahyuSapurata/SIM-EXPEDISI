@@ -362,7 +362,7 @@ class Laporan extends BaseController
             ->whereBetween(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%d-%m-%Y"), "%Y-%m-%d")'), [$startDate, $endDate])
             ->get();
 
-        $inventaris = OperasionalKantor::where('kategori', 'inventaris')
+        $inventaris = OperasionalKantor::where('kategori', 'invetaris')
             ->whereBetween(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%d-%m-%Y"), "%Y-%m-%d")'), [$startDate, $endDate])
             ->get();
 
