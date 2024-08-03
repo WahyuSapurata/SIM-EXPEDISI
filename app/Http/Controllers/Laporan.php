@@ -404,9 +404,6 @@ class Laporan extends BaseController
             'inventaris' => $inv,
             'biaya_lain' => $biy,
         ];
-
-        dd($result);
-
         return view('pdf.neraca', compact('module', 'startDateStr', 'endDateStr', 'result'));
     }
 }
