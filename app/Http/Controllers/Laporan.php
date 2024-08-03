@@ -8,7 +8,7 @@ use App\Models\Piutan;
 use App\Models\RealCost;
 use App\Models\SaldoAwal;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -359,21 +359,19 @@ class Laporan extends BaseController
 
         // Mengambil semua data dari tabel terkait berdasarkan rentang tanggal
         $operasional = OperasionalKantor::where('kategori', 'operasional')
-            ->whereBetween('tanggal', [$startDate, $endDate])
+            ->whereBetween(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%d-%m-%Y"), "%Y-%m-%d")'), [$startDate, $endDate])
             ->get();
 
         $inventaris = OperasionalKantor::where('kategori', 'inventaris')
-            ->whereBetween('tanggal', [$startDate, $endDate])
+            ->whereBetween(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%d-%m-%Y"), "%Y-%m-%d")'), [$startDate, $endDate])
             ->get();
 
         $biaya = OperasionalKantor::where('kategori', 'biaya')
-            ->whereBetween('tanggal', [$startDate, $endDate])
+            ->whereBetween(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%d-%m-%Y"), "%Y-%m-%d")'), [$startDate, $endDate])
             ->get();
 
-        $piutang = Piutan::whereBetween('created_at', [$startDate, $endDate])->get();
-
-        $realcost = RealCost::whereBetween('tanggal', [$startDate, $endDate])->get();
-
+        $piutang = Piutan::whereBetween(DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d")'), [$startDate, $endDate])->get();
+        $realcost = RealCost::whereBetween(DB::raw('DATE_FORMAT(STR_TO_DATE(tanggal, "%d-%m-%Y"), "%Y-%m-%d")'), [$startDate, $endDate])->get();
         $saldo = SaldoAwal::all(); // Asumsikan saldo awal tidak memiliki tanggal
 
         // Menghitung total saldo awal dan real cost
@@ -406,6 +404,8 @@ class Laporan extends BaseController
             'inventaris' => $inv,
             'biaya_lain' => $biy,
         ];
+
+        dd($result);
 
         return view('pdf.neraca', compact('module', 'startDateStr', 'endDateStr', 'result'));
     }
