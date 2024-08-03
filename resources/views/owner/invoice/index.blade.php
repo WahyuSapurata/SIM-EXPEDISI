@@ -99,10 +99,10 @@
                         return item;
                     }
                 }, {
-                    data: 'alamat_pengirim',
+                    data: 'alamat_tujuan',
                     className: 'text-center',
                 }, {
-                    data: 'alamat_tujuan',
+                    data: 'alamat_pengirim',
                     className: 'text-center',
                 }, {
                     data: 'qty',
