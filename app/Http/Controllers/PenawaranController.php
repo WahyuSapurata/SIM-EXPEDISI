@@ -36,8 +36,8 @@ class PenawaranController extends BaseController
 
             // Ambil nomor invoice terakhir untuk bulan dan tahun ini
             $lastInvoice = DB::table('penawarans')
-                ->whereRaw('EXTRACT(YEAR FROM STR_TO_DATE(tanggal, "%Y-%m-%d")) = ?', [$year])
-                ->whereRaw('EXTRACT(MONTH FROM STR_TO_DATE(tanggal, "%Y-%m-%d")) = ?', [$month])
+                ->whereRaw('EXTRACT(YEAR FROM STR_TO_DATE(tanggal, "%d-%m-%Y")) = ?', [$year])
+                ->whereRaw('EXTRACT(MONTH FROM STR_TO_DATE(tanggal, "%d-%m-%Y")) = ?', [$month])
                 ->orderBy('id', 'desc')
                 ->first();
 

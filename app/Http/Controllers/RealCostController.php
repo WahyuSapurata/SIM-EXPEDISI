@@ -42,8 +42,8 @@ class RealCostController extends BaseController
 
             // Ambil nomor invoice terakhir untuk bulan dan tahun ini
             $lastInvoice = DB::table('real_costs')
-                ->whereRaw('EXTRACT(YEAR FROM STR_TO_DATE(tanggal, "%Y-%m-%d")) = ?', [$year])
-                ->whereRaw('EXTRACT(MONTH FROM STR_TO_DATE(tanggal, "%Y-%m-%d")) = ?', [$month])
+                ->whereRaw('EXTRACT(YEAR FROM STR_TO_DATE(tanggal, "%d-%m-%Y")) = ?', [$year])
+                ->whereRaw('EXTRACT(MONTH FROM STR_TO_DATE(tanggal, "%d-%m-%Y")) = ?', [$month])
                 ->orderBy('id', 'desc')
                 ->first();
 
@@ -52,7 +52,7 @@ class RealCostController extends BaseController
                 $lastNumber = (int) explode('-', $lastInvoice->no_invoice)[0]; // Ambil nomor urut pertama
                 $newNumber = str_pad($lastNumber + 1, 2, '0', STR_PAD_LEFT);
             } else {
-                // Jika belum ada invoice sebelumnya, mulai dari 01
+                // Jika belum ada invoice sebelumnya, mulai dari nomor awal
                 $newNumber = '594';
             }
 
