@@ -354,6 +354,48 @@
             control.searchTable(this.value);
         })
 
+        function renderList(data) {
+            if (!data) {
+                return '-';
+            }
+
+            // Decode HTML entity (&quot; menjadi ")
+            const textarea = document.createElement('textarea');
+            textarea.innerHTML = data;
+            data = textarea.value;
+
+            // Parse JSON
+            try {
+                data = JSON.parse(data);
+            } catch (e) {
+                data = [data];
+            }
+
+            if (!Array.isArray(data)) {
+                data = [data];
+            }
+
+            let html = '<ul class="mb-0 ps-4">';
+
+            data.forEach(function(item) {
+
+                // Pecah string berdasarkan koma
+                const items = String(item)
+                    .split(',')
+                    .map(value => value.trim())
+                    .filter(value => value !== '');
+
+                items.forEach(function(value) {
+                    html += `<li>${value}</li>`;
+                });
+
+            });
+
+            html += '</ul>';
+
+            return html;
+        }
+
         const initDatatable = async () => {
             // Destroy existing DataTable if it exists
             if ($.fn.DataTable.isDataTable('#kt_table_data')) {
@@ -363,84 +405,106 @@
             // Initialize DataTable
             $('#kt_table_data').DataTable({
                 responsive: true,
-                pageLength: 10,
-                order: [
-                    [0, 'asc']
-                ],
+
                 processing: true,
-                ajax: '/admin/get-realcost',
+                serverSide: true,
+
+                pageLength: 10,
+
+                ajax: {
+                    url: '/admin/get-realcost',
+                    type: 'GET'
+                },
+
                 columns: [{
-                    data: null,
-                    render: function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    }
-                }, {
-                    data: 'tanggal',
-                    className: 'text-center',
-                }, {
-                    data: 'nama_kapal',
-                    className: 'text-center',
-                }, {
-                    data: 'costumer',
-                    className: 'text-center',
-                }, {
-                    data: 'jenis_muatan',
-                    render: function(data, type, row, meta) {
-                        let item = '<ul>';
-                        $.each(data, function(x, y) {
-                            item += `<li>${y}</li>`;
-                        });
-                        item += '</ul>';
-                        return item;
-                    }
-                }, {
-                    data: 'alamat_tujuan',
-                    className: 'text-center',
-                }, {
-                    data: 'alamat_pengirim',
-                    className: 'text-center',
-                }, {
-                    data: 'qty',
-                    render: function(data, type, row, meta) {
-                        let item = '<ul>';
-                        $.each(data, function(x, y) {
-                            item += `<li>${y}</li>`;
-                        });
-                        item += '</ul>';
-                        return item;
-                    }
-                }, {
-                    data: 'satuan',
-                    render: function(data, type, row, meta) {
-                        let item = '<ul>';
-                        $.each(data, function(x, y) {
-                            item += `<li>${y}</li>`;
-                        });
-                        item += '</ul>';
-                        return item;
-                    }
-                }, {
-                    data: 'harga',
-                    render: function(data, type, row, meta) {
-                        let item = '<ul>';
-                        $.each(data, function(x, y) {
-                            item += `<li>Rp. ${numeral(y).format(
-                            '0,0')}</li>`;
-                        });
-                        item += '</ul>';
-                        return item;
-                    }
-                }, {
-                    data: 'uuid',
-                }],
-                columnDefs: [{
-                    targets: -1,
-                    title: 'Submit',
-                    width: '8rem',
-                    orderable: false,
-                    render: function(data, type, full, meta) {
-                        return `
-                            <a href="javascript:;" type="button" data-uuid="${data}" data-kt-drawer-show="true" data-kt-drawer-target="#side_form" class="btn btn-primary button-update btn-icon btn-sm">
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'tanggal',
+                        name: 'rc.tanggal',
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'nama_kapal',
+                        name: 'rc.nama_kapal',
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'costumer',
+                        name: 'dc.nama',
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'jenis_muatan',
+                        name: 'rc.jenis_muatan',
+                        render: function(data) {
+                            return renderList(data);
+                        }
+                    }, {
+                        data: 'alamat_tujuan',
+                        name: 'rc.alamat_tujuan',
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'alamat_pengirim',
+                        name: 'rc.alamat_pengirim',
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'qty',
+                        name: 'rc.qty',
+                        render: function(data) {
+                            return renderList(data);
+                        }
+                    },
+                    {
+                        data: 'satuan',
+                        name: 'rc.satuan',
+                        render: function(data) {
+                            return renderList(data);
+                        }
+                    },
+                    {
+                        data: 'harga',
+                        name: 'rc.harga',
+                        render: function(data) {
+
+                            if (data === null || data === undefined || data === '') {
+                                return '-';
+                            }
+
+                            if (typeof data === 'string') {
+                                try {
+                                    data = JSON.parse(data);
+                                } catch (e) {
+                                    data = [data];
+                                }
+                            }
+
+                            if (!Array.isArray(data)) {
+                                data = [data];
+                            }
+
+                            return `
+            <ul class="mb-0 ps-4">
+                ${data.map(item =>
+                    `<li>Rp. ${numeral(item).format('0,0')}</li>`
+                ).join('')}
+            </ul>
+        `;
+                        }
+                    },
+                    {
+                        data: 'uuid',
+                        name: 'rc.uuid',
+                        orderable: false,
+                        searchable: false,
+                        render: function(data) {
+                            return `
+                    <a href="javascript:;" type="button" data-uuid="${data}" data-kt-drawer-show="true" data-kt-drawer-target="#side_form" class="btn btn-primary button-update btn-icon btn-sm">
                                 <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M3.5 16.2738C3.5 17.8891 4.80945 19.1986 6.42474 19.1986H10.8479L11.1681 17.9178C11.3139 17.3347 11.6155 16.8022 12.0405 16.3771L17.3522 11.0655C17.9947 10.423 18.8591 10.138 19.6986 10.2103V5.92474C19.6986 4.30945 18.3891 3 16.7738 3H10.6994V7.27463C10.6994 8.88992 9.38992 10.1994 7.77463 10.1994H3.5V16.2738ZM9.34949 3.39597L3.89597 8.84949H7.77463C8.6444 8.84949 9.34949 8.1444 9.34949 7.27463V3.39597ZM17.9886 11.7018L12.6769 17.0135C12.3672 17.3231 12.1475 17.7112 12.0412 18.1361L11.6293 19.7836C11.4503 20.5 12.0993 21.1491 12.8157 20.9699L14.4632 20.558C14.8881 20.4518 15.2761 20.2321 15.5859 19.9224L20.8975 14.6107C21.7008 13.8074 21.7008 12.5051 20.8975 11.7018C20.0943 10.8984 18.7919 10.8984 17.9886 11.7018Z" fill="white"/>
                                 <mask id="mask0_1953_23043" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="3" y="3" width="19" height="18">
@@ -463,15 +527,10 @@
                                 </g>
                                 </svg>
                             </a>
-                        `;
-                    },
-                }],
-                rowCallback: function(row, data, index) {
-                    var api = this.api();
-                    var startIndex = api.context[0]._iDisplayStart;
-                    var rowIndex = startIndex + index + 1;
-                    $('td', row).eq(0).html(rowIndex);
-                },
+                `;
+                        }
+                    }
+                ]
             });
         };
 

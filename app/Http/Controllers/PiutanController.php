@@ -8,6 +8,8 @@ use App\Models\DataCustomer;
 use App\Models\Piutan;
 use App\Models\RealCost;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class PiutanController extends BaseController
 {
@@ -23,47 +25,96 @@ class PiutanController extends BaseController
         return view('owner.piutang.index', compact('module'));
     }
 
-    public function get()
+    public function get(Request $request)
     {
-        // Mengambil semua data pengguna dengan status 'Belum Lunas'
-        $dataFull = Piutan::where('status', 'Belum Lunas')->get();
+        $query = DB::table('piutans as p')
+            ->leftJoin('real_costs as rc', 'rc.uuid', '=', 'p.uuid_realcost')
+            ->leftJoin('data_customers as dc', 'dc.uuid', '=', 'rc.uuid_customer')
+            ->where('p.status', 'Belum Lunas')
+            ->select([
+                'p.*',
+                'rc.no_invoice',
+                'rc.tanggal',
+                'rc.jenis_muatan',
+                'rc.harga',
+                'rc.qty',
+                'rc.terbayarkan',
+                'dc.nama as costumer',
+            ]);
 
-        $dataFull->map(function ($item) {
-            // Ambil data RealCost berdasarkan UUID
-            $data_realcost = RealCost::where('uuid', $item->uuid_realcost)->first();
-            if ($data_realcost) {
-                // Ambil data customer berdasarkan UUID customer
-                $data_customer = DataCustomer::where('uuid', $data_realcost->uuid_customer)->first();
+        return DataTables::of($query)
+            ->addIndexColumn()
 
-                // Update item dengan data yang relevan
-                $item->costumer = $data_customer ? $data_customer->nama : 'N/A';
-                $item->no_invoice = $data_realcost->no_invoice;
-                $item->tanggal = $data_realcost->tanggal;
-                $item->jenis_muatan = $data_realcost->jenis_muatan;
+            ->addColumn('total_harga', function ($row) {
 
-                // Hitung piutang berdasarkan array harga dan qty
-                $total_harga = 0;
-                foreach ($data_realcost->harga as $index => $harga) {
-                    $qty = $data_realcost->qty[$index] ?? 0;
-                    $total_harga += $harga * $qty;
+                $hargaArray = $this->parseJsonArray($row->harga);
+                $qtyArray   = $this->parseJsonArray($row->qty);
+
+                $totalHarga = 0;
+
+                $length = min(
+                    count($hargaArray),
+                    count($qtyArray)
+                );
+
+                for ($i = 0; $i < $length; $i++) {
+
+                    $harga = (float) $hargaArray[$i];
+                    $qty   = (float) $qtyArray[$i];
+
+                    $totalHarga += $harga * $qty;
                 }
 
-                // Hitung piutang
-                $item->piutang = $total_harga - $data_realcost->terbayarkan;
-            } else {
-                // Jika data realcost tidak ditemukan
-                $item->costumer = 'N/A';
-                $item->no_invoice = 'N/A';
-                $item->tanggal = 'N/A';
-                $item->jenis_muatan = 'N/A';
-                $item->piutang = 0;
-            }
+                return $totalHarga;
+            })
 
-            return $item;
-        });
+            ->addColumn('piutang', function ($row) {
 
-        // Mengembalikan response berdasarkan data yang sudah disaring
-        return $this->sendResponse($dataFull, 'Get data success');
+                $hargaArray = $this->parseJsonArray($row->harga);
+                $qtyArray   = $this->parseJsonArray($row->qty);
+
+                $totalHarga = 0;
+
+                $length = min(
+                    count($hargaArray),
+                    count($qtyArray)
+                );
+
+                for ($i = 0; $i < $length; $i++) {
+
+                    $harga = (float) $hargaArray[$i];
+                    $qty   = (float) $qtyArray[$i];
+
+                    $totalHarga += $harga * $qty;
+                }
+
+                $terbayarkan = (float) ($row->terbayarkan ?? 0);
+
+                return max(0, $totalHarga - $terbayarkan);
+            })
+
+            ->make(true);
+    }
+
+    /**
+
+Mengubah JSON string menjadi array.
+     */
+    private function parseJsonArray($value)
+    {
+        if (empty($value)) {
+            return [];
+        }
+
+        // Jika sudah array
+        if (is_array($value)) {
+            return $value;
+        }
+
+        // Decode JSON
+        $decoded = json_decode($value, true);
+
+        return is_array($decoded) ? $decoded : [];
     }
 
 

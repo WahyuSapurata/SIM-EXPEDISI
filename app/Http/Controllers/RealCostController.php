@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateRealCostRequest;
 use App\Models\DataCustomer;
 use App\Models\RealCost;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class RealCostController extends BaseController
 {
@@ -18,17 +19,21 @@ class RealCostController extends BaseController
 
     public function get()
     {
-        // Mengambil semua data pengguna
-        $dataFull = RealCost::all();
-        $dataFull->map(function ($item) {
-            $data_costumer = DataCustomer::where('uuid', $item->uuid_customer)->first();
+        $query = DB::table('real_costs as rc')
+            ->leftJoin(
+                'data_customers as dc',
+                'dc.uuid',
+                '=',
+                'rc.uuid_customer'
+            )
+            ->select([
+                'rc.*',
+                'dc.nama as costumer',
+            ]);
 
-            $item->costumer = $data_costumer->nama;
-            return $item;
-        });
-
-        // Mengembalikan response berdasarkan data yang sudah disaring
-        return $this->sendResponse($dataFull, 'Get data success');
+        return DataTables::of($query)
+            ->addIndexColumn()
+            ->make(true);
     }
 
     public function store(StoreRealCostRequest $storeRealCostRequest)
