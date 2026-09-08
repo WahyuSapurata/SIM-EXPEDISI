@@ -444,33 +444,76 @@
                     var api = this.api();
                     let total = 0;
 
-                    // Calculate total for 'keluar' and 'masuk' columns
                     api.column(10, {
                         search: 'applied'
                     }).data().each(function(value) {
-                        // Periksa apakah harga dan qty valid
-                        const hargaArray = value.harga ||
-                    []; // Gunakan array kosong jika harga tidak ada
-                        const qtyArray = value.qty ||
-                    []; // Gunakan array kosong jika qty tidak ada
+
+                        console.log('Data column:', value);
+
+                        // Fungsi untuk mengubah HTML entity menjadi karakter normal
+                        function decodeHtml(html) {
+                            const textarea = document.createElement('textarea');
+                            textarea.innerHTML = html;
+                            return textarea.value;
+                        }
+
+                        // Fungsi untuk memastikan data menjadi array
+                        function parseArray(value) {
+                            if (Array.isArray(value)) {
+                                return value;
+                            }
+
+                            if (typeof value !== 'string') {
+                                return [];
+                            }
+
+                            try {
+                                // Decode &quot; menjadi "
+                                const decoded = decodeHtml(value);
+
+                                const parsed = JSON.parse(decoded);
+
+                                return Array.isArray(parsed) ? parsed : [];
+                            } catch (error) {
+                                console.error('Gagal parse array:', value, error);
+                                return [];
+                            }
+                        }
+
+                        const hargaArray = parseArray(value.harga);
+                        const qtyArray = parseArray(value.qty);
+
+                        console.log('Harga:', hargaArray);
+                        console.log('Qty:', qtyArray);
 
                         // Pastikan harga dan qty memiliki panjang yang sama
-                        const length = Math.min(hargaArray.length, qtyArray.length);
+                        const length = Math.min(
+                            hargaArray.length,
+                            qtyArray.length
+                        );
 
-                        // Hitung total harga
                         let totalHarga = 0;
+
                         for (let i = 0; i < length; i++) {
-                            const harga = parseFloat(hargaArray[i]) ||
-                                0; // Gunakan default 0 jika harga tidak ada
-                            const qty = parseFloat(qtyArray[i]) ||
-                                0; // Gunakan default 0 jika qty tidak ada
-                            totalHarga += harga * qty; // Tambahkan total harga
+
+                            const harga = parseFloat(
+                                String(hargaArray[i]).replace(/[^\d.-]/g, '')
+                            ) || 0;
+
+                            const qty = parseFloat(
+                                String(qtyArray[i]).replace(/[^\d.-]/g, '')
+                            ) || 0;
+
+                            totalHarga += harga * qty;
                         }
-                        total += totalHarga; // Tambahkan totalHarga ke total keseluruhan
+
+                        total += totalHarga;
                     });
 
-                    // Update the total row in the footer
-                    $('#total-invoice').html('Rp ' + numeral(total).format('0,0'));
+                    // Tampilkan total
+                    $('#total-invoice').html(
+                        'Rp ' + numeral(total).format('0,0')
+                    );
                 },
             });
         };
