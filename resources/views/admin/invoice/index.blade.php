@@ -300,7 +300,6 @@
                         }
                     }, {
                         data: null,
-                        name: 'total_harga',
                         orderable: false,
                         searchable: false,
                         className: 'text-center',
@@ -332,8 +331,7 @@
                                     const parsed = JSON.parse(decoded);
 
                                     return Array.isArray(parsed) ?
-                                        parsed :
-                                        [parsed];
+                                        parsed : [parsed];
 
                                 } catch (e) {
                                     return [];
@@ -360,10 +358,7 @@
                                     .replace(/\D/g, '')
                                 ) || 0;
 
-                                const qty = Number(
-                                    String(qtyArray[i])
-                                    .replace(/\D/g, '')
-                                ) || 0;
+                                const qty = Number(qtyArray[i]) || 0;
 
                                 totalHarga += harga * qty;
                             }

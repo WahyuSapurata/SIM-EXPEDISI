@@ -259,7 +259,7 @@
                     className: 'text-center',
                 }, {
                     data: 'costumer',
-                    name: 'rc.nama',
+                    name: 'rc.costumer',
                     className: 'text-center',
                 }, {
                     data: 'jenis_muatan',

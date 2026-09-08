@@ -25,7 +25,7 @@ class PiutanController extends BaseController
         return view('owner.piutang.index', compact('module'));
     }
 
-    public function get(Request $request)
+    public function get()
     {
         $query = DB::table('piutans as p')
             ->leftJoin('real_costs as rc', 'rc.uuid', '=', 'p.uuid_realcost')
@@ -45,6 +45,22 @@ class PiutanController extends BaseController
         return DataTables::of($query)
             ->addIndexColumn()
 
+            // Custom search
+            ->filter(function ($query) {
+                if (request()->has('search') && request('search.value') != '') {
+                    $search = strtolower(request('search.value'));
+
+                    $query->where(function ($q) use ($search) {
+                        $q->whereRaw('LOWER(rc.tanggal) LIKE ?', ["%{$search}%"])
+                            ->orWhereRaw('LOWER(dc.nama) LIKE ?', ["%{$search}%"])
+                            ->orWhereRaw('LOWER(rc.jenis_muatan) LIKE ?', ["%{$search}%"])
+                            ->orWhereRaw('LOWER(rc.no_invoice) LIKE ?', ["%{$search}%"])
+                            ->orWhereRaw('LOWER(rc.terbayarkan) LIKE ?', ["%{$search}%"])
+                            ->orWhereRaw('LOWER(p.status) LIKE ?', ["%{$search}%"]);
+                    });
+                }
+            })
+
             ->addColumn('total_harga', function ($row) {
 
                 $hargaArray = $this->parseJsonArray($row->harga);
@@ -58,7 +74,6 @@ class PiutanController extends BaseController
                 );
 
                 for ($i = 0; $i < $length; $i++) {
-
                     $harga = (float) $hargaArray[$i];
                     $qty   = (float) $qtyArray[$i];
 
@@ -81,7 +96,6 @@ class PiutanController extends BaseController
                 );
 
                 for ($i = 0; $i < $length; $i++) {
-
                     $harga = (float) $hargaArray[$i];
                     $qty   = (float) $qtyArray[$i];
 
@@ -97,8 +111,7 @@ class PiutanController extends BaseController
     }
 
     /**
-
-Mengubah JSON string menjadi array.
+     * Mengubah JSON string menjadi array.
      */
     private function parseJsonArray($value)
     {
@@ -106,12 +119,10 @@ Mengubah JSON string menjadi array.
             return [];
         }
 
-        // Jika sudah array
         if (is_array($value)) {
             return $value;
         }
 
-        // Decode JSON
         $decoded = json_decode($value, true);
 
         return is_array($decoded) ? $decoded : [];
