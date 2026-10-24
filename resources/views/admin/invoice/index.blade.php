@@ -235,6 +235,7 @@
                 },
 
                 searchDelay: 800,
+                deferRender: true,
 
                 columns: [{
                         data: 'DT_RowIndex',

@@ -48,31 +48,23 @@ class Invoice extends BaseController
             ]);
 
         return DataTables::of($query)
-
-            // Kolom virtual untuk status pembayaran
             ->addColumn('status_pembayaran', function ($row) {
                 return (float) $row->terbayarkan > 0
                     ? 'Terbayar'
                     : 'Belum Terbayar';
             })
-
-            // Atur pencarian status pembayaran
             ->filterColumn('status_pembayaran', function ($query, $keyword) {
                 $keyword = strtolower(trim($keyword));
 
-                if (str_contains('terbayar', $keyword) && $keyword !== '') {
-                    $query->where('rc.terbayarkan', '>', 0);
-                } elseif (
-                    str_contains('belum terbayar', $keyword) &&
-                    $keyword !== ''
-                ) {
+                if (str_contains($keyword, 'belum')) {
                     $query->where(function ($q) {
                         $q->where('rc.terbayarkan', '<=', 0)
                             ->orWhereNull('rc.terbayarkan');
                     });
+                } elseif (str_contains($keyword, 'terbayar')) {
+                    $query->where('rc.terbayarkan', '>', 0);
                 }
             })
-
             ->addIndexColumn()
             ->make(true);
     }
