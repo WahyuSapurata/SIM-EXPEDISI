@@ -158,10 +158,19 @@
             window.open(`/admin/print-invoice/` + uuid);
         });
 
-        $(document).on('keyup', '#search_', function(e) {
-            e.preventDefault();
-            control.searchTable(this.value);
-        })
+        // let searchTimeout;
+
+        // $(document).on('input', '#search_', function(e) {
+        //     e.preventDefault();
+
+        //     const keyword = this.value;
+
+        //     clearTimeout(searchTimeout);
+
+        //     searchTimeout = setTimeout(function() {
+        //         control.searchTable(keyword);
+        //     }, 10000);
+        // });
 
         function renderList(data) {
             if (!data) {
@@ -217,7 +226,6 @@
 
                 processing: true,
                 serverSide: true,
-                searchDelay: 500,
 
                 pageLength: 10,
 
@@ -225,6 +233,8 @@
                     url: '/admin/get-invoice',
                     type: 'GET'
                 },
+
+                searchDelay: 800,
 
                 columns: [{
                         data: 'DT_RowIndex',
