@@ -217,6 +217,7 @@
 
                 processing: true,
                 serverSide: true,
+                searchDelay: 500,
 
                 pageLength: 10,
 
