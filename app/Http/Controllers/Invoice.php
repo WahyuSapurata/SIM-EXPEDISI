@@ -33,11 +33,46 @@ class Invoice extends BaseController
                 'rc.uuid_customer'
             )
             ->select([
-                'rc.*',
+                'rc.uuid',
+                'rc.tanggal',
+                'rc.uuid_customer',
+                'rc.nama_kapal',
+                'rc.jenis_muatan',
+                'rc.alamat_tujuan',
+                'rc.alamat_pengirim',
+                'rc.qty',
+                'rc.satuan',
+                'rc.harga',
+                'rc.terbayarkan',
                 'dc.nama as costumer',
             ]);
 
         return DataTables::of($query)
+
+            // Kolom virtual untuk status pembayaran
+            ->addColumn('status_pembayaran', function ($row) {
+                return (float) $row->terbayarkan > 0
+                    ? 'Terbayar'
+                    : 'Belum Terbayar';
+            })
+
+            // Atur pencarian status pembayaran
+            ->filterColumn('status_pembayaran', function ($query, $keyword) {
+                $keyword = strtolower(trim($keyword));
+
+                if (str_contains('terbayar', $keyword) && $keyword !== '') {
+                    $query->where('rc.terbayarkan', '>', 0);
+                } elseif (
+                    str_contains('belum terbayar', $keyword) &&
+                    $keyword !== ''
+                ) {
+                    $query->where(function ($q) {
+                        $q->where('rc.terbayarkan', '<=', 0)
+                            ->orWhereNull('rc.terbayarkan');
+                    });
+                }
+            })
+
             ->addIndexColumn()
             ->make(true);
     }

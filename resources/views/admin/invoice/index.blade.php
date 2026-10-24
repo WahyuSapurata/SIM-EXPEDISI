@@ -224,6 +224,7 @@
                     url: '/admin/get-invoice',
                     type: 'GET'
                 },
+
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -385,11 +386,11 @@
                         }
                     },
                     {
-                        data: 'terbayarkan',
-                        name: 'rc.terbayarkan',
+                        data: 'status_pembayaran',
+                        name: 'status_pembayaran',
                         className: 'text-center',
-                        render: function(data, type, row, meta) {
-                            const nominal = Number(data) || 0;
+                        render: function(data, type, row) {
+                            const nominal = Number(row.terbayarkan) || 0;
 
                             if (nominal > 0) {
                                 return `
@@ -448,8 +449,6 @@
                         search: 'applied'
                     }).data().each(function(value) {
 
-                        console.log('Data column:', value);
-
                         // Fungsi untuk mengubah HTML entity menjadi karakter normal
                         function decodeHtml(html) {
                             const textarea = document.createElement('textarea');
@@ -482,9 +481,6 @@
 
                         const hargaArray = parseArray(value.harga);
                         const qtyArray = parseArray(value.qty);
-
-                        console.log('Harga:', hargaArray);
-                        console.log('Qty:', qtyArray);
 
                         // Pastikan harga dan qty memiliki panjang yang sama
                         const length = Math.min(
